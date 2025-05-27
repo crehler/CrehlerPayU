@@ -1,21 +1,23 @@
 <?php
+
 /**
- * @copyright 2024 Crehler Sp. z o. o.
+ * @copyright 2019 Crehler Sp. z o. o.
  *
  * https://crehler.com/
  * support@crehler.com
  *
  * This file is part of the PayU plugin for Shopware 6.
- * License CC BY-ND 4.0 (https://creativecommons.org/licenses/by-nd/4.0/legalcode.pl) see LICENSE file.
- *
+ * All rights reserved.
  */
+
+declare(strict_types=1);
 
 namespace Crehler\PayU\Util;
 
-use Crehler\PayU\Entity\OrderTransactionRepository;
-use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Exception\InconsistentCriteriaIdsException;
+use Crehler\PayU\Entity\OrderTransactionRepository;
+use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
@@ -24,12 +26,10 @@ use Shopware\Core\System\CustomField\CustomFieldTypes;
 
 class TransactionFieldsUtil
 {
-    /** @var EntityRepository */
-    private $customFieldRepository;
-
-    public function __construct(EntityRepository $customFieldRepository, private readonly Context $context)
-    {
-        $this->customFieldRepository = $customFieldRepository;
+    public function __construct(
+        private EntityRepository $customFieldRepository,
+        private readonly Context $context
+    ) {
     }
 
     /**
@@ -48,10 +48,11 @@ class TransactionFieldsUtil
                 [
                     'name' => OrderTransactionRepository::PAYU_PAY_URL,
                     'type' => CustomFieldTypes::TEXT,
-                ], [
-                'name' => OrderTransactionRepository::PAYU_EXTERNAL_ID,
-                'type' => CustomFieldTypes::TEXT,
-            ],
+                ],
+                [
+                    'name' => OrderTransactionRepository::PAYU_EXTERNAL_ID,
+                    'type' => CustomFieldTypes::TEXT,
+                ],
             ],
             $this->context
         );
@@ -68,7 +69,7 @@ class TransactionFieldsUtil
             return;
         }
 
-        $ids = array_map(static fn ($id) => ['id' => $id], $customFieldIds->getIds());
+        $ids = array_map(static fn($id) => ['id' => $id], $customFieldIds->getIds());
 
         $this->customFieldRepository->delete($ids, $this->context);
     }
@@ -80,10 +81,13 @@ class TransactionFieldsUtil
     {
         $criteria = new Criteria();
         $criteria->addFilter(
-            new MultiFilter('OR', [
-                new EqualsFilter('name', OrderTransactionRepository::PAYU_PAY_URL),
-                new EqualsFilter('name', OrderTransactionRepository::PAYU_EXTERNAL_ID),
-            ])
+            new MultiFilter(
+                MultiFilter::CONNECTION_OR,
+                [
+                    new EqualsFilter('name', OrderTransactionRepository::PAYU_PAY_URL),
+                    new EqualsFilter('name', OrderTransactionRepository::PAYU_EXTERNAL_ID),
+                ]
+            )
         );
 
         return $this->customFieldRepository->searchIds($criteria, $this->context);

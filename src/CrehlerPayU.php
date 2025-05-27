@@ -1,14 +1,16 @@
 <?php
+
 /**
- * @copyright 2024 Crehler Sp. z o. o.
+ * @copyright 2019 Crehler Sp. z o. o.
  *
  * https://crehler.com/
  * support@crehler.com
  *
  * This file is part of the PayU plugin for Shopware 6.
- * License CC BY-ND 4.0 (https://creativecommons.org/licenses/by-nd/4.0/legalcode.pl) see LICENSE file.
- *
+ * All rights reserved.
  */
+
+declare(strict_types=1);
 
 namespace Crehler\PayU;
 
@@ -23,41 +25,35 @@ use Shopware\Core\Framework\Plugin\Context\DeactivateContext;
 use Shopware\Core\Framework\Plugin\Context\InstallContext;
 use Shopware\Core\Framework\Plugin\Context\UninstallContext;
 
-/**
- * Class CrehlerPayU
- */
 class CrehlerPayU extends Plugin
 {
-    public function install(InstallContext $context): void
+    public function install(InstallContext $installContext): void
     {
-        (new Install($this->container, $context))->install();
-        parent::install($context);
+        (new Install($this->container, $installContext))->install();
+        parent::install($installContext);
     }
 
-    public function uninstall(UninstallContext $context): void
+    public function uninstall(UninstallContext $uninstallContext): void
     {
-        (new Uninstall($this->container, $context))->uninstall();
-
-        parent::uninstall($context);
-    }
-
-    /**
-     * @throws InconsistentCriteriaIdsException
-     */
-    public function activate(ActivateContext $context): void
-    {
-        (new Activate($this->container, $context))->activate();
-
-        parent::activate($context);
+        (new Uninstall($this->container, $uninstallContext))->uninstall();
+        parent::uninstall($uninstallContext);
     }
 
     /**
      * @throws InconsistentCriteriaIdsException
      */
-    public function deactivate(DeactivateContext $context): void
+    public function activate(ActivateContext $activateContext): void
     {
-        (new Deactivate($this->container, $context))->deactivate();
+        (new Activate($this->container, $activateContext))->activate();
+        parent::activate($activateContext);
+    }
 
-        parent::deactivate($context);
+    /**
+     * @throws InconsistentCriteriaIdsException
+     */
+    public function deactivate(DeactivateContext $deactivateContext): void
+    {
+        (new Deactivate($this->container, $deactivateContext))->deactivate();
+        parent::deactivate($deactivateContext);
     }
 }

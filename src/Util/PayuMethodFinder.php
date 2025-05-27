@@ -1,43 +1,37 @@
 <?php
+
 /**
- * @copyright 2024 Crehler Sp. z o. o.
+ * @copyright 2019 Crehler Sp. z o. o.
  *
  * https://crehler.com/
  * support@crehler.com
  *
  * This file is part of the PayU plugin for Shopware 6.
- * License CC BY-ND 4.0 (https://creativecommons.org/licenses/by-nd/4.0/legalcode.pl) see LICENSE file.
- *
+ * All rights reserved.
  */
+
+declare(strict_types=1);
 
 namespace Crehler\PayU\Util;
 
-use Crehler\PayU\Core\Checkout\Payment\PayUPayment;
-use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 
-class PayuMethodFinder
+readonly class PayuMethodFinder
 {
-    /**
-     * @var EntityRepository
-     */
-    private $paymentRepository;
-
-    public function __construct(EntityRepository $paymentRepository)
+    public function __construct(private EntityRepository $paymentMethodRepository)
     {
-        $this->paymentRepository = $paymentRepository;
     }
 
-    public function getPayUPaymentMethodId(Context $context = null): ?string
+    public function getPayUPaymentMethodId(string $handlerIdentifier, ?Context $context = null): ?string
     {
-        if (empty($context)) {
-            $context = Context::createDefaultContext();
-        }
-        $criteria = new Criteria();
-        $criteria->addFilter(new EqualsFilter('handlerIdentifier', PayUPayment::class));
-
-        return $this->paymentRepository->searchIds($criteria, $context)->firstId();
+        return $this->paymentMethodRepository->searchIds(
+            (new Criteria())->addFilter(
+                new EqualsFilter('handlerIdentifier', $handlerIdentifier)
+            ),
+            $context ?? Context::createDefaultContext()
+        )->firstId();
     }
 }

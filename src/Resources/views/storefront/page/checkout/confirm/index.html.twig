@@ -1,0 +1,51 @@
+{% sw_extends '@Storefront/storefront/page/checkout/confirm/index.html.twig' %}
+
+{% block page_checkout_aside_actions %}
+    {% if
+        context.paymentMethod.formattedHandlerIdentifier == 'handler_crehler_payupaymentblikwithoutredirect'
+        and page.cart.errors is empty
+    %}
+        {% set confirmOrderFormAction = path('frontend.checkout.finish.order') %}
+        {% set payuBlikWithoutRedirectPaymentMethodOptions = {
+            paymentMethodId : context.paymentMethod.id
+        } %}
+        <div class="checkout-aside-action">
+            <form id="confirmOrderForm"
+                  action="{{ confirmOrderFormAction }}"
+                  data-payu-blik-without-redirect-payment-method="true"
+                  data-payu-blik-without-redirect-payment-method-options="{{ payuBlikWithoutRedirectPaymentMethodOptions | json_encode }}"
+                  data-form-preserver="true"
+                  method="post">
+                {% block page_checkout_confirm_form_submit %}
+                    <div class="d-grid">
+                        <button id="confirmFormSubmit"
+                                class="btn btn-primary btn-lg"
+                                form="confirmOrderForm"
+                                {% if page.cart.errors.blockResubmit %}
+                                    disabled
+                                {% endif %}
+                                type="submit">
+                            {{ "checkout.confirmSubmit" | trans | sw_sanitize }}
+                        </button>
+                    </div>
+                {% endblock %}
+            </form>
+        </div>
+    {% else %}
+        {{ parent() }}
+    {% endif %}
+{% endblock %}
+
+{% block base_pseudo_modal %}
+    {{ parent() }}
+    {% sw_include "@CrehlerPayU/storefront/component/payment/blik-without-redirect-payment-method-modal.html.twig" %}
+{% endblock %}
+
+{% block base_body_script %}
+    {{ parent() }}
+
+    <script>
+        window.router['payu.blik-without-redirect-payment.create-order'] = '{{ path('payu.blik-without-redirect-payment.create-order') }}';
+        window.router['payu.blik-without-redirect-payment.check-payment-state'] = '{{ path('payu.blik-without-redirect-payment.check-payment-state') }}';
+    </script>
+{% endblock %}

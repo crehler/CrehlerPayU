@@ -1,0 +1,36 @@
+<sw-card
+        class="sw-order-detail-base__payu"
+        title="PayU"
+>
+    <sw-container columns="1fr 1fr" gap="20px">
+        <sw-button
+                variant="primary"
+                :isLoading="isLoading"
+                @click="sendPaymentLink"
+        >
+            {{ $tc('crehler-payu.paymentLink.paymentLinkButton') }}
+        </sw-button>
+        <sw-button
+                variant="primary"
+                :disabled="surcharge === 0"
+                :isLoading="isLoading"
+                @click="sendSurchargeLink"
+        >
+            {{ $tc('crehler-payu.paymentLink.surchargeButton') }}
+            <template v-if="surcharge !== 0">
+                ({{ currencyFilter(surcharge, order.currency.isoCode, order.itemRounding.decimals) }})
+            </template>
+        </sw-button>
+    </sw-container>
+    <sw-modal
+            v-if="paymentLink !== null || surchargeLink !== null"
+            :title="paymentLinkModalTitle"
+            :is-loading="isLoading"
+            variant="default"
+            @modal-close="onClose"
+    >
+        <sw-textarea-field
+                disabled
+                :value="paymentLink || surchargeLink"/>
+    </sw-modal>
+</sw-card>

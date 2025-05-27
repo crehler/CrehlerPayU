@@ -1,0 +1,27 @@
+{
+    "crehler-payu": {
+        "blikWithoutRedirectPaymentMethod": {
+            "input": {
+                "placeholder": "Wpisz kod BLIK"
+            },
+            "modal": {
+                "content": {
+                    "message": {
+                        "wait": {
+                            "header": "Potwierdź płatność BLIK w aplikacji banku",
+                            "content": "Przejdź do aplikacji bankowej, aby potwierdzić transakcję."
+                        },
+                        "error": {
+                            "header": "Płatność nie powiodła się",
+                            "content": "Niestety, nie odnotowaliśmy potwierdzenia Twojej płatności za pomocą BLIKA.<br />W mailu wyślemy link do ponowienia płatności."
+                        },
+                        "success": {
+                            "header": "Płatność zaakceptowana!",
+                            "content": "Udało się! Twoje zamówienie zostało opłacone."
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

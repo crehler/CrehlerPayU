@@ -1,0 +1,27 @@
+{
+    "crehler-payu": {
+        "blikWithoutRedirectPaymentMethod": {
+            "input": {
+                "placeholder": "Geben Sie den BLIK-Code ein"
+            },
+            "modal": {
+                "content": {
+                    "message": {
+                        "wait": {
+                            "header": "Bestätigen Sie Ihre BLIK-Zahlung in der App der Bank",
+                            "content": "Gehen Sie zu Ihrer Banking-App, um die Transaktion zu bestätigen."
+                        },
+                        "error": {
+                            "header": "Bezahlung fehlgeschlagen",
+                            "content": "Leider haben wir keine Bestätigung Ihrer Zahlung über BLIK erhalten.<br />Wir senden Ihnen in der E-Mail einen Link zur Wiederholung der Zahlung."
+                        },
+                        "success": {
+                            "header": "Zahlung akzeptiert!",
+                            "content": "Es funktionierte! Ihre Bestellung wurde bezahlt."
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

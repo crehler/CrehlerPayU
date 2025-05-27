@@ -20,6 +20,25 @@
             "successMessage": "Die Daten sind korrekt",
             "errorTitle": "Error",
             "errorMessage": "Ungültige Daten"
+        },
+        "paymentLink": {
+            "paymentLinkButton": "Zahlungslink senden",
+            "surchargeButton": "Zahlungsgebühr senden",
+            "paymentLinkModalTitle": "Zahlungslink",
+            "surchargeModalTitle": "Zahlungsgebühr",
+            "PaymentLinkSuccessMessage": "Der Zahlungslink wurde generiert und an den Kunden gesendet.",
+            "SurchargeSuccessMessage": "Die Zahlungsgebühr wurde generiert und an den Kunden gesendet."
+        },
+        "order": {
+            "detail": {
+                "transactionList":{
+                    "title": "Transaktionen",
+                    "statusColumn": "Status",
+                    "priceColumn": "Preis",
+                    "paymentMethodNameColumn": "Zahlungsmethode",
+                    "createdAtColumn": "Erstellt am"
+                }
+            }
         }
     }
 }

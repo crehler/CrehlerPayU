@@ -1,0 +1,27 @@
+{
+    "crehler-payu": {
+        "blikWithoutRedirectPaymentMethod": {
+            "input": {
+                "placeholder": "Enter the BLIK code"
+            },
+            "modal": {
+                "content": {
+                    "message": {
+                        "wait": {
+                            "header": "Confirm your BLIK payment in the bank's app",
+                            "content": "Go to your banking app to confirm the transaction."
+                        },
+                        "error": {
+                            "header": "Payment failed",
+                            "content": "Unfortunately, we did not receive confirmation of your payment via BLIK.<br />We will send you a link to repeat the payment in the e-mail."
+                        },
+                        "success": {
+                            "header": "Payment accepted!",
+                            "content": "It worked! Your order has been paid."
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

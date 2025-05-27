@@ -1,72 +1,98 @@
 <?php
+
 /**
- * @copyright 2024 Crehler Sp. z o. o.
+ * @copyright 2019 Crehler Sp. z o. o.
  *
  * https://crehler.com/
  * support@crehler.com
  *
  * This file is part of the PayU plugin for Shopware 6.
- * License CC BY-ND 4.0 (https://creativecommons.org/licenses/by-nd/4.0/legalcode.pl) see LICENSE file.
- *
+ * All rights reserved.
  */
+
+declare(strict_types=1);
 
 namespace Crehler\PayU\Service\PayU;
 
 use Crehler\PayU\Util\TestPaymentConfig;
 use Crehler\PayU\Util\VendorLoader;
 use Monolog\Logger;
+use OauthCacheFile;
+use OpenPayU_Configuration;
+use OpenPayU_Order;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-/**
- * Class ConfigurationFactor
- */
+use function is_dir;
+use function mkdir;
+use function sprintf;
+
 class ConfigurationService
 {
     final public const CONFIG_PLUGIN_PREFIX = 'CrehlerPayU.config.';
+
     final public const CONFIG_PAYMENT_METHOD_ID = 'paymentMethodId';
+
     final public const CONFIG_ORDER_DESCRIPTION_SHORT = 'orderDescriptionShort';
+
     final public const CONFIG_ORDER_DESCRIPTION_LONG = 'orderDescriptionLong';
+
     final public const CONFIG_SECURE = 'secure';
+
     final public const CONFIG_POS_ID = 'posId';
+
     final public const CONFIG_MD5_KEY = 'md5Key';
+
     final public const CONFIG_CLIENT_ID = 'clientId';
+
     final public const CONFIG_CLIENT_SECRET = 'clientSecret';
+
     final public const CONFIG_SANDBOX = 'sandbox';
+
     final public const CONFIG_SANDBOX_POS_ID = 'sandboxPosId';
+
     final public const CONFIG_SANDBOX__MD5_KEY = 'sandboxMd5Key';
+
     final public const CONFIG_SANDBOX_CLIENT_ID = 'sandboxClientId';
+
     final public const CONFIG_SANDBOX_CLIENT_SECRET = 'sandboxClientSecret';
 
-    /**
-     * ConfigurationFactor constructor.
-     */
-    public function __construct(private readonly SystemConfigService $configurationService, VendorLoader $vendorLoader, private readonly ParameterBagInterface $parameterBag, private readonly Logger $logger, private readonly RequestStack $request)
-    {
+    public function __construct(
+        private readonly SystemConfigService $configurationService,
+        private readonly Logger $logger,
+        private readonly ParameterBagInterface $parameterBag,
+        private readonly RequestStack $request,
+        VendorLoader $vendorLoader,
+    ) {
         $vendorLoader->loadOpenPayU();
     }
 
     /**
      * @throws \OpenPayU_Exception_Configuration
      */
-    public function initialize(bool $sandbox = null, string $salesChannel = null): void
+    public function initialize(?bool $sandbox = null, string $salesChannel = null): void
     {
         if ($salesChannel === null) {
             $salesChannel = $this->request->getCurrentRequest()?->get('sw-sales-channel-id');
         }
 
         if ($sandbox === null) {
-            $sandbox = (int) $this->configurationService->get(self::CONFIG_PLUGIN_PREFIX . self::CONFIG_SANDBOX, $salesChannel);
+            $sandbox = $this->isSandBox($salesChannel);
         }
+
         if ($sandbox) {
             $this->initializePayUStaticConfiguration(
                 true,
-                $this->configurationService->get(self::CONFIG_PLUGIN_PREFIX . self::CONFIG_SANDBOX_POS_ID, $salesChannel),
-                $this->configurationService->get(self::CONFIG_PLUGIN_PREFIX . self::CONFIG_SANDBOX__MD5_KEY, $salesChannel),
-                $this->configurationService->get(self::CONFIG_PLUGIN_PREFIX . self::CONFIG_SANDBOX_CLIENT_ID, $salesChannel),
-                $this->configurationService->get(self::CONFIG_PLUGIN_PREFIX . self::CONFIG_SANDBOX_CLIENT_SECRET, $salesChannel)
+                $this->configurationService
+                    ->get(self::CONFIG_PLUGIN_PREFIX . self::CONFIG_SANDBOX_POS_ID, $salesChannel),
+                $this->configurationService
+                    ->get(self::CONFIG_PLUGIN_PREFIX . self::CONFIG_SANDBOX__MD5_KEY, $salesChannel),
+                $this->configurationService
+                    ->get(self::CONFIG_PLUGIN_PREFIX . self::CONFIG_SANDBOX_CLIENT_ID, $salesChannel),
+                $this->configurationService
+                    ->get(self::CONFIG_PLUGIN_PREFIX . self::CONFIG_SANDBOX_CLIENT_SECRET, $salesChannel)
             );
         } else {
             $this->initializePayUStaticConfiguration(
@@ -79,57 +105,58 @@ class ConfigurationService
         }
     }
 
-    /**
-     * @return bool
-     */
-    public function isCompleteConfiguration()
+    public function isCompleteConfiguration(): bool
     {
         $salesChannel = $this->request->getCurrentRequest()?->get('sw-sales-channel-id');
 
         if ($this->configurationService->get(self::CONFIG_PLUGIN_PREFIX . self::CONFIG_SANDBOX)) {
-            if (strlen($this->configurationService->get(self::CONFIG_PLUGIN_PREFIX . self::CONFIG_SANDBOX_POS_ID, $salesChannel)) == 0
-                || strlen($this->configurationService->get(self::CONFIG_PLUGIN_PREFIX . self::CONFIG_SANDBOX__MD5_KEY, $salesChannel)) == 0
-                || strlen($this->configurationService->get(self::CONFIG_PLUGIN_PREFIX . self::CONFIG_SANDBOX_CLIENT_ID, $salesChannel)) == 0
-                || strlen($this->configurationService->get(self::CONFIG_PLUGIN_PREFIX . self::CONFIG_SANDBOX_CLIENT_SECRET, $salesChannel)) == 0
+            if (
+                $this->configurationService
+                    ->get(self::CONFIG_PLUGIN_PREFIX . self::CONFIG_SANDBOX_POS_ID, $salesChannel) === ''
+                || $this->configurationService
+                    ->get(self::CONFIG_PLUGIN_PREFIX . self::CONFIG_SANDBOX__MD5_KEY, $salesChannel) === ''
+                || $this->configurationService
+                    ->get(self::CONFIG_PLUGIN_PREFIX . self::CONFIG_SANDBOX_CLIENT_ID, $salesChannel) === ''
+                || $this->configurationService
+                    ->get(self::CONFIG_PLUGIN_PREFIX . self::CONFIG_SANDBOX_CLIENT_SECRET, $salesChannel) === ''
             ) {
                 return false;
             }
-        } else {
-            if (strlen($this->configurationService->get(self::CONFIG_PLUGIN_PREFIX . self::CONFIG_POS_ID, $salesChannel)) == 0
-                || strlen($this->configurationService->get(self::CONFIG_PLUGIN_PREFIX . self::CONFIG_MD5_KEY, $salesChannel)) == 0
-                || strlen($this->configurationService->get(self::CONFIG_PLUGIN_PREFIX . self::CONFIG_CLIENT_ID, $salesChannel)) == 0
-                || strlen($this->configurationService->get(self::CONFIG_PLUGIN_PREFIX . self::CONFIG_CLIENT_SECRET, $salesChannel)) == 0
-            ) {
-                return false;
-            }
+        } elseif (
+            $this->configurationService
+                ->get(self::CONFIG_PLUGIN_PREFIX . self::CONFIG_POS_ID, $salesChannel) === ''
+            || $this->configurationService
+                ->get(self::CONFIG_PLUGIN_PREFIX . self::CONFIG_MD5_KEY, $salesChannel) === ''
+            || $this->configurationService
+                ->get(self::CONFIG_PLUGIN_PREFIX . self::CONFIG_CLIENT_ID, $salesChannel) === ''
+            || $this->configurationService
+                ->get(self::CONFIG_PLUGIN_PREFIX . self::CONFIG_CLIENT_SECRET, $salesChannel) === ''
+        ) {
+            return false;
         }
 
         return true;
     }
 
-    /**
-     * @return bool
-     */
-    public function isSadBox()
+    public function isSandBox(?string $salesChannelId = null): bool
     {
-        $salesChannel = $this->request->getCurrentRequest()?->get('sw-sales-channel-id');
-
-        return (bool) $this->configurationService->get(self::CONFIG_PLUGIN_PREFIX . self::CONFIG_SANDBOX, $salesChannel);
+        return $this->configurationService->getBool(
+            self::CONFIG_PLUGIN_PREFIX . self::CONFIG_SANDBOX,
+            $salesChannelId ?? $this->request->getCurrentRequest()?->get('sw-sales-channel-id')
+        );
     }
 
     /**
      * Checks the credentials set in the plugin configuration.
      * Useful when verifying payments when adding to sales channel.
-     *
-     * @return bool
      */
-    public function checkSavedCredentials(Request $request = null)
+    public function checkSavedCredentials(?Request $request = null): bool
     {
         $request ??= Request::createFromGlobals();
 
         try {
             $this->initialize();
-        } catch (\Exception) {
+        } catch (\Throwable) {
             return false;
         }
 
@@ -139,10 +166,8 @@ class ConfigurationService
     /**
      * Checks the credentials provided in the request.
      * Used in the "Check Credentials" button in the plugin configuration.
-     *
-     * @return bool
      */
-    public function checkRequestCredentials(Request $request = null)
+    public function checkRequestCredentials(?Request $request = null): bool
     {
         $request ??= Request::createFromGlobals();
 
@@ -174,36 +199,40 @@ class ConfigurationService
     /**
      * PayU does not provide a test method.
      * So we create and cancel the order to test the credentials.
-     *
-     * @return bool
      */
-    protected function checkCredentials(Request $request)
+    protected function checkCredentials(Request $request): bool
     {
-        $merchantId = intval(\OpenPayU_Configuration::getOauthClientId() ? \OpenPayU_Configuration::getOauthClientId() : \OpenPayU_Configuration::getMerchantPosId());
+        $merchantId =
+            (int) (\OpenPayU_Configuration::getOauthClientId() ?: \OpenPayU_Configuration::getMerchantPosId());
+
         try {
-            $response = \OpenPayU_Order::create(TestPaymentConfig::getConfiguration($merchantId, $request->getClientIp()));
+            $response = OpenPayU_Order::create(
+                TestPaymentConfig::getConfiguration($merchantId, $request->getClientIp())
+            );
         } catch (\OpenPayU_Exception $e) {
             $this->logger->error($e->getMessage());
-
             return false;
         }
 
         if ($response->getStatus() !== 'SUCCESS') {
-            $this->logger->error('Error while checking the status of the test transaction, returned status: ' . $response->getStatus());
+            $this->logger->error(
+                "Error while checking the status of the test transaction, returned status: " . $response->getStatus()
+            );
 
             return false;
         }
 
         try {
-            $cancelResponse = \OpenPayU_Order::cancel($response->getResponse()->orderId);
+            $cancelResponse = OpenPayU_Order::cancel($response->getResponse()->orderId);
         } catch (\OpenPayU_Exception $e) {
             $this->logger->error($e->getMessage());
-
             return false;
         }
 
         if ($cancelResponse->getStatus() !== 'SUCCESS') {
-            $this->logger->error('Error while canceling the test transaction, returned status: ' . $cancelResponse->getStatus());
+            $this->logger->error(
+                "Error while canceling the test transaction, returned status: " . $cancelResponse->getStatus()
+            );
 
             return false;
         }
@@ -211,37 +240,48 @@ class ConfigurationService
         return true;
     }
 
-    private function initializePayUStaticConfiguration(bool $sandbox, ?string $merchantPosId, ?string $signatureKey, ?string $oauthClientId, ?string $oauthClientSecret)
-    {
+    private function initializePayUStaticConfiguration(
+        bool $sandbox,
+        ?string $merchantPosId,
+        ?string $signatureKey,
+        ?string $oauthClientId,
+        ?string $oauthClientSecret
+    ): void {
         try {
-            \OpenPayU_Configuration::setOauthTokenCache(new \OauthCacheFile($this->getCacheDir()));
+            OpenPayU_Configuration::setOauthTokenCache(new OauthCacheFile($this->getCacheDir()));
+
             if ($sandbox) {
-                \OpenPayU_Configuration::setEnvironment(self::CONFIG_SANDBOX);
+                OpenPayU_Configuration::setEnvironment(self::CONFIG_SANDBOX);
             } else {
-                \OpenPayU_Configuration::setEnvironment(self::CONFIG_SECURE);
+                OpenPayU_Configuration::setEnvironment(self::CONFIG_SECURE);
             }
         } catch (\Throwable $e) {
             $this->logger->error($e->getMessage());
         }
+
         if ($merchantPosId !== null) {
-            \OpenPayU_Configuration::setMerchantPosId($merchantPosId);
+            OpenPayU_Configuration::setMerchantPosId($merchantPosId);
         }
+
         if ($signatureKey !== null) {
-            \OpenPayU_Configuration::setSignatureKey($signatureKey);
+            OpenPayU_Configuration::setSignatureKey($signatureKey);
         }
+
         if ($oauthClientId !== null) {
-            \OpenPayU_Configuration::setOauthClientId($oauthClientId);
+            OpenPayU_Configuration::setOauthClientId($oauthClientId);
         }
+
         if ($oauthClientSecret !== null) {
-            \OpenPayU_Configuration::setOauthClientSecret($oauthClientSecret);
+            OpenPayU_Configuration::setOauthClientSecret($oauthClientSecret);
         }
     }
 
-    private function getCacheDir()
+    private function getCacheDir(): string
     {
         $dir = $this->parameterBag->get('kernel.cache_dir') . DIRECTORY_SEPARATOR . 'PayU';
-        if (!is_dir($dir)) {
-            mkdir($dir, 0777, true);
+
+        if (!is_dir($dir) && !mkdir($dir, 0777, true) && !is_dir($dir)) {
+            throw new \RuntimeException(sprintf('Directory "%s" was not created', $dir));
         }
 
         return $dir;

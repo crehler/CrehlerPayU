@@ -5,6 +5,7 @@
         xsi:schemaLocation="http://symfony.com/schema/routing
         http://symfony.com/schema/routing/routing-1.0.xsd">
 
-    <import resource="../../Controller/Api" type="annotation" />
-    <import resource="../../Controller/Storefront" type="annotation" />
+    <import resource="../../Controller/Api" type="attribute" />
+    <import resource="../../Controller/Storefront" type="attribute" />
+    <import resource="../../Checkout/Payment/PayU/SalesChannel/*Route.php" type="attribute" />
 </routes>

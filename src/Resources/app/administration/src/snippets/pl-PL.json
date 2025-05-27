@@ -20,6 +20,25 @@
             "successMessage": "Dane są prawidłowe",
             "errorTitle": "Błąd",
             "errorMessage": "Dane nieprawidłowe"
+        },
+        "paymentLink": {
+            "paymentLinkButton": "Wyślij link do płatności",
+            "surchargeButton": "Wyślij link do dopłaty",
+            "paymentLinkModalTitle": "Link do płatności",
+            "surchargeModalTitle": "Link do dopłaty",
+            "PaymentLinkSuccessMessage": "Link do płatności został wygenerowany i wysłany do klienta.",
+            "SurchargeSuccessMessage": "Link do dopłaty został wygenerowany i wysłany do klienta."
+        },
+        "order": {
+            "detail": {
+                "transactionList":{
+                    "title": "Lista Transakcji",
+                    "statusColumn": "Status",
+                    "priceColumn": "Kwota",
+                    "paymentMethodNameColumn": "Metoda płatności",
+                    "createdAtColumn": "Data utworzenia"
+                }
+            }
         }
     }
 }

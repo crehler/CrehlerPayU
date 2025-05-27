@@ -1,5 +1,4 @@
-import template from "./cr-payu-sandbox-credential.html.twig";
-
+import template from './cr-payu-sandbox-credential.html.twig';
 
 const { Component, Mixin } = Shopware;
 
@@ -38,23 +37,24 @@ Component.register('cr-payu-sandbox-credential', {
         },
         saveData(componentName) {
             let component = this.$parent;
-            if(component.config.componentName !== componentName) {
+
+            if (component.config.componentName !== componentName) {
                 return;
             }
-            let group = component.$parent;
 
+            let group = component.$parent;
             let configElement = group.$parent;
 
             return configElement.saveAll()
         },
         showNotification(result) {
-            if(result) {
+            if (result) {
                 this.createNotificationSuccess({
                     title: this.$tc('crehler-payu.config.successTitle'),
                     message: this.$tc('crehler-payu.config.successMessage'),
                     autoClose: false
                 })
-            }else{
+            } else {
                 this.createNotificationError({
                     title: this.$tc('crehler-payu.config.errorTitle'),
                     message: this.$tc('crehler-payu.config.errorMessage'),

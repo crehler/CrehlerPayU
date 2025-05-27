@@ -1,7 +1,7 @@
 import template from './sw-order-detail-pay.html.twig';
-const { Component } = Shopware;
-
 import './sw-order-detail-pay.scss';
+
+const { Component } = Shopware;
 
 Component.register('sw-order-detail-payu', {
     template,

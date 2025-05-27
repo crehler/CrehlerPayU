@@ -1,0 +1,9 @@
+{% block sw_order_detail_general_info_card %}
+    {% parent() %}
+    <cr-payment-links
+            v-if="showPayUCard"
+            :order="order"
+            :transaction="order.transactions.last"
+            @saveEdits="onSaveEdits"
+    />
+{% endblock %}
