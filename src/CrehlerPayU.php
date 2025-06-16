@@ -27,6 +27,11 @@ use Shopware\Core\Framework\Plugin\Context\UninstallContext;
 
 class CrehlerPayU extends Plugin
 {
+    public function executeComposerCommands(): bool
+    {
+        return true;
+    }
+
     public function install(InstallContext $installContext): void
     {
         (new Install($this->container, $installContext))->install();

@@ -3,7 +3,7 @@
   "description": "PayU integration for Shopware 6",
   "type": "shopware-platform-plugin",
   "license": "CC BY-ND 4.0",
-  "version": "3.0.15",
+  "version": "3.0.16",
   "authors": [
     {
       "name": "Crehler Sp. z o. o.",
