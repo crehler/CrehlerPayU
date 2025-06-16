@@ -1,89 +1,69 @@
 <?php
+
 /**
- * @copyright 2024 Crehler Sp. z o. o.
+ * @copyright 2019 Crehler Sp. z o. o.
  *
  * https://crehler.com/
  * support@crehler.com
  *
  * This file is part of the PayU plugin for Shopware 6.
- * License CC BY-ND 4.0 (https://creativecommons.org/licenses/by-nd/4.0/legalcode.pl) see LICENSE file.
- *
+ * All rights reserved.
  */
+
+declare(strict_types=1);
 
 namespace Crehler\PayU\Struct;
 
-/**
- * Class Buyer
- */
 class Buyer extends PayUStruct
 {
     /**
      * Payer’s IP address, e.g. 123.123.123.123. Note: 0.0.0.0 is not accepted
-     *
-     * @var string
      */
-    protected $customerIp;
+    protected string $customerIp;
 
     /**
-     * 	ID of the customer used in merchant system
-     *
-     * @var string
+     * ID of the customer used in merchant system
      */
-    protected $extCustomerId;
+    protected string $extCustomerId;
 
     /**
      * Buyer's email address
-     *
-     * @var string
      */
-    protected $email;
+    protected string $email;
 
     /**
      * Buyer's telephone number
-     *
-     * @var string
      */
-    protected $phone;
+    protected string $phone;
 
     /**
      * Buyer's first name
-     *
-     * @var string
      */
-    protected $firstName;
+    protected string $firstName;
 
     /**
      * Buyer's last name
-     *
-     * @var string
      */
-    protected $lastName;
+    protected string $lastName;
 
     /**
      * National Identification Number
-     *
-     * @var string
      */
-    protected $nin;
+    protected string $nin;
 
     /**
      * Denotes the language version of PayU hosted payment page and of e-mail messages sent from PayU to the payer
-     *
-     * @var string
      */
-    protected $language;
+    protected string $language;
 
-    /**
-     * @var BuyerDelivery
-     */
-    protected $delivery;
+    protected BuyerDelivery $delivery;
 
     public function getCustomerIp(): string
     {
         return $this->customerIp;
     }
 
-    public function setCustomerIp(string $customerIp): Buyer
+    public function setCustomerIp(string $customerIp): self
     {
         $this->customerIp = $customerIp;
 
@@ -95,7 +75,7 @@ class Buyer extends PayUStruct
         return $this->extCustomerId;
     }
 
-    public function setExtCustomerId(string $extCustomerId): Buyer
+    public function setExtCustomerId(string $extCustomerId): self
     {
         $this->extCustomerId = $extCustomerId;
 
@@ -107,7 +87,7 @@ class Buyer extends PayUStruct
         return $this->email;
     }
 
-    public function setEmail(string $email): Buyer
+    public function setEmail(string $email): self
     {
         $this->email = $email;
 
@@ -119,7 +99,7 @@ class Buyer extends PayUStruct
         return $this->phone;
     }
 
-    public function setPhone(string $phone): Buyer
+    public function setPhone(string $phone): self
     {
         $this->phone = $phone;
 
@@ -131,7 +111,7 @@ class Buyer extends PayUStruct
         return $this->firstName;
     }
 
-    public function setFirstName(string $firstName): Buyer
+    public function setFirstName(string $firstName): self
     {
         $this->firstName = $firstName;
 
@@ -143,7 +123,7 @@ class Buyer extends PayUStruct
         return $this->lastName;
     }
 
-    public function setLastName(string $lastName): Buyer
+    public function setLastName(string $lastName): self
     {
         $this->lastName = $lastName;
 
@@ -155,7 +135,7 @@ class Buyer extends PayUStruct
         return $this->nin;
     }
 
-    public function setNin(string $nin): Buyer
+    public function setNin(string $nin): self
     {
         $this->nin = $nin;
 
@@ -164,14 +144,14 @@ class Buyer extends PayUStruct
 
     public function getLanguage(): string
     {
-        if (!in_array($this->language, ['en', 'de', 'pl'])) {
+        if (!in_array($this->language, ['en', 'de', 'pl'], true)) {
             return 'en';
         }
 
         return $this->language;
     }
 
-    public function setLanguage(string $language): Buyer
+    public function setLanguage(string $language): self
     {
         $this->language = $language;
 
@@ -183,7 +163,7 @@ class Buyer extends PayUStruct
         return $this->delivery;
     }
 
-    public function setDelivery(BuyerDelivery $delivery): Buyer
+    public function setDelivery(BuyerDelivery $delivery): self
     {
         $this->delivery = $delivery;
 

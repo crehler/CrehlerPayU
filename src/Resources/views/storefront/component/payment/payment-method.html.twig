@@ -1,0 +1,19 @@
+{% sw_extends '@Storefront/storefront/component/payment/payment-method.html.twig' %}
+
+{% block component_payment_fieldset_template %}
+    {% if
+        payment.id is same as(selectedPaymentMethodId)
+        and payment.formattedHandlerIdentifier == 'handler_crehler_payupaymentblikwithoutredirect'
+        and activeRoute != 'frontend.account.payment.page'
+    %}
+        <div class="payu-blik-without-redirect-payment-method-input-container">
+            <input id="payu-blik-without-redirect-payment-method-input"
+                   type="text"
+                   class="form-control payu-blik-without-redirect-payment-method--input"
+                   name="blikCode"
+                   form="confirmOrderForm"
+                   placeholder="{{ 'crehler-payu.blikWithoutRedirectPaymentMethod.input.placeholder' | trans | sw_sanitize }}"
+                   maxlength="7">
+        </div>
+    {% endif %}
+{% endblock %}

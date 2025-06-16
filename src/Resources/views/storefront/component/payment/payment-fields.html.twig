@@ -1,0 +1,63 @@
+{% sw_extends "@Storefront/storefront/component/payment/payment-fields.html.twig" %}
+
+{% block component_payment_method %}
+    {% for payment in page.paymentMethods[:visiblePaymentMethodsLimit] %}
+        {%
+            if payment.customFields.payu_payment_methods_wl is defined ||
+            payment.customFields.payu_payment_methods_bl is defined
+        %}
+            {% set payuPaymentMethodsOptions = {
+                paymentMethodId: payment.id,
+                paymentMethodsEndpoint: path('frontend.payu.payments-methods'),
+                lastPayuPaymentMethodSelected: context.customer.customFields.payuPaymentMethodId is same as selectedPaymentMethodId,
+                lastPayuPaymentMethod: context.customer.customFields.payuPaymentMethod,
+                selectedPaymentMethodId: selectedPaymentMethodId,
+                cartTotalPrice: page.cart.price.totalPrice
+            } %}
+            <div
+                    class="d-none"
+                    data-payment-methods-plugin="true"
+                    data-payment-methods-plugin-options="{{ payuPaymentMethodsOptions|json_encode }}"
+            >
+                {% sw_include '@Storefront/storefront/component/payment/payment-method.html.twig' %}
+            </div>
+        {% else %}
+            {% sw_include '@Storefront/storefront/component/payment/payment-method.html.twig' %}
+        {% endif %}
+    {% endfor %}
+
+    {% block component_payment_method_collapse %}
+        {% if page.paymentMethods|length > visiblePaymentMethodsLimit and visiblePaymentMethodsLimit is not same as(null) %}
+            <div class="collapse">
+                {% for payment in page.paymentMethods[visiblePaymentMethodsLimit:] %}
+                    {% if
+                        payment.customFields.payu_payment_methods_wl is defined ||
+                        payment.customFields.payu_payment_methods_bl is defined
+                    %}
+                        {% set payuPaymentMethodsOptions = {
+                            paymentMethodId: payment.id,
+                            paymentMethodsEndpoint: path('frontend.payu.payments-methods'),
+                            lastPayuPaymentMethodSelected: context.customer.customFields.payuPaymentMethodId is same as selectedPaymentMethodId,
+                            lastPayuPaymentMethod: context.customer.customFields.payuPaymentMethod,
+                            selectedPaymentMethodId: selectedPaymentMethodId,
+                            cartTotalPrice: page.cart.price.totalPrice
+                        } %}
+                        <div
+                                class="d-none"
+                                data-payment-methods-plugin="true"
+                                data-payment-methods-plugin-options="{{ payuPaymentMethodsOptions|json_encode }}"
+                        >
+                            {% sw_include '@Storefront/storefront/component/payment/payment-method.html.twig' %}
+                        </div>
+                    {% else %}
+                        {% sw_include '@Storefront/storefront/component/payment/payment-method.html.twig' %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            {% block component_payment_method_collapse_trigger %}
+                {{ parent() }}
+            {% endblock %}
+        {% endif %}
+    {% endblock %}
+{% endblock %}

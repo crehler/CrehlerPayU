@@ -1,22 +1,24 @@
 <?php
+
 /**
- * @copyright 2024 Crehler Sp. z o. o.
+ * @copyright 2019 Crehler Sp. z o. o.
  *
  * https://crehler.com/
  * support@crehler.com
  *
  * This file is part of the PayU plugin for Shopware 6.
- * License CC BY-ND 4.0 (https://creativecommons.org/licenses/by-nd/4.0/legalcode.pl) see LICENSE file.
- *
+ * All rights reserved.
  */
+
+declare(strict_types=1);
 
 namespace Crehler\PayU\Service;
 
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Shopware\Core\Framework\DataAbstractionLayer\Exception\InconsistentCriteriaIdsException;
 use Crehler\PayU\Service\PayU\ConfigurationService;
 use Shopware\Core\Checkout\Order\Aggregate\OrderAddress\OrderAddressEntity;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Shopware\Core\Framework\DataAbstractionLayer\Exception\InconsistentCriteriaIdsException;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\System\Country\CountryEntity;
 use Shopware\Core\System\Language\LanguageEntity;
@@ -24,36 +26,20 @@ use Shopware\Core\System\Locale\LocaleEntity;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 
-/**
- * Class PaymentDetailsReader
- */
-class PaymentDetailsReader implements PaymentDetailsReaderInterface
+use function explode;
+use function in_array;
+use function str_contains;
+use function str_replace;
+
+readonly class PaymentDetailsReader implements PaymentDetailsReaderInterface
 {
-    /** @var EntityRepository */
-    private $languageRepository;
-
-    /** @var EntityRepository */
-    private $localeRepository;
-
-    /** @var EntityRepository */
-    private $orderAddressRepository;
-
-    /** @var EntityRepository */
-    private $countryRepository;
-
-    /**
-     * PaymentDetailsReader constructor.
-     */
-    public function __construct(EntityRepository $languageRepository,
-        EntityRepository $localeRepository,
-        EntityRepository $orderAddressRepository,
-        EntityRepository $countryRepository,
-        private readonly SystemConfigService $configurationService)
-    {
-        $this->languageRepository = $languageRepository;
-        $this->localeRepository = $localeRepository;
-        $this->orderAddressRepository = $orderAddressRepository;
-        $this->countryRepository = $countryRepository;
+    public function __construct(
+        private SystemConfigService $configurationService,
+        private EntityRepository $countryRepository,
+        private EntityRepository $languageRepository,
+        private EntityRepository $localeRepository,
+        private EntityRepository $orderAddressRepository
+    ) {
     }
 
     public function getLanguageCode(SalesChannelContext $salesChannelContext): string
@@ -80,12 +66,10 @@ class PaymentDetailsReader implements PaymentDetailsReaderInterface
      */
     public function getOrderAddressEntity(string $orderAddressID): OrderAddressEntity
     {
-        return $this->orderAddressRepository->search(
-            new Criteria([
-                $orderAddressID,
-            ]),
-            Context::createDefaultContext()
-        )->getEntities()->first();
+        return $this->orderAddressRepository
+            ->search(new Criteria([$orderAddressID]), Context::createDefaultContext())
+            ->getEntities()
+            ->first();
     }
 
     public function getCountryCode(string $countryID): string
@@ -99,14 +83,26 @@ class PaymentDetailsReader implements PaymentDetailsReaderInterface
         return $countryEntity->getIso();
     }
 
-    public function generateShortDescription($orderNumber): string
+    public function generateShortDescription(string $orderNumber): string
     {
-        return str_replace('{number}', $orderNumber, $this->configurationService->get(ConfigurationService::CONFIG_PLUGIN_PREFIX . ConfigurationService::CONFIG_ORDER_DESCRIPTION_SHORT));
+        return str_replace(
+            '{number}',
+            $orderNumber,
+            $this->configurationService->get(
+                ConfigurationService::CONFIG_PLUGIN_PREFIX . ConfigurationService::CONFIG_ORDER_DESCRIPTION_SHORT
+            )
+        );
     }
 
-    public function generateLongDescription($orderNumber): string
+    public function generateLongDescription(string $orderNumber): string
     {
-        return str_replace('{number}', $orderNumber, $this->configurationService->get(ConfigurationService::CONFIG_PLUGIN_PREFIX . ConfigurationService::CONFIG_ORDER_DESCRIPTION_LONG));
+        return str_replace(
+            '{number}',
+            $orderNumber,
+            $this->configurationService->get(
+                ConfigurationService::CONFIG_PLUGIN_PREFIX . ConfigurationService::CONFIG_ORDER_DESCRIPTION_LONG
+            )
+        );
     }
 
     /**
@@ -114,12 +110,10 @@ class PaymentDetailsReader implements PaymentDetailsReaderInterface
      */
     private function getLanguageEntity(string $languageID): LanguageEntity
     {
-        return $this->languageRepository->search(
-            new Criteria([
-                $languageID,
-            ]),
-            Context::createDefaultContext()
-        )->getEntities()->first();
+        return $this->languageRepository
+            ->search(new Criteria([$languageID]), Context::createDefaultContext())
+            ->getEntities()
+            ->first();
     }
 
     /**
@@ -127,12 +121,10 @@ class PaymentDetailsReader implements PaymentDetailsReaderInterface
      */
     private function getLocaleEntity(string $localeID): LocaleEntity
     {
-        return $this->localeRepository->search(
-            new Criteria([
-                $localeID,
-            ]),
-            Context::createDefaultContext()
-        )->getEntities()->first();
+        return $this->localeRepository
+            ->search(new Criteria([$localeID]), Context::createDefaultContext())
+            ->getEntities()
+            ->first();
     }
 
     /**
@@ -140,11 +132,9 @@ class PaymentDetailsReader implements PaymentDetailsReaderInterface
      */
     private function getCountryEntity(string $countryID): CountryEntity
     {
-        return $this->countryRepository->search(
-            new Criteria([
-                $countryID,
-            ]),
-            Context::createDefaultContext()
-        )->getEntities()->first();
+        return $this->countryRepository
+            ->search(new Criteria([$countryID]), Context::createDefaultContext())
+            ->getEntities()
+            ->first();
     }
 }

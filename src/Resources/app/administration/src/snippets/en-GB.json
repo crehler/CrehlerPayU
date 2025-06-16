@@ -20,6 +20,25 @@
             "successMessage": "The data is correct",
             "errorTitle": "Error",
             "errorMessage": "Invalid data"
+        },
+        "paymentLink": {
+            "paymentLinkButton": "Send payment link",
+            "surchargeButton": "Send surcharge link",
+            "paymentLinkModalTitle": "Payment link",
+            "surchargeModalTitle": "Surcharge link",
+            "PaymentLinkSuccessMessage": "The payment link has been generated and sent to the customer.",
+            "SurchargeSuccessMessage": "The surcharge link has been generated and sent to the customer."
+        },
+        "order": {
+            "detail": {
+                "transactionList":{
+                    "title": "Transactions",
+                    "statusColumn": "Status",
+                    "priceColumn": "Price",
+                    "paymentMethodNameColumn": "Payment method",
+                    "createdAtColumn": "Created at"
+                }
+            }
         }
     }
 }

@@ -1,0 +1,27 @@
+{% block payu_blik_without_redirect_payment_method_modal_content %}
+    <div class="payu-blik-without-redirect-payment-method--modal-content">
+        <div class="payu-blik-without-redirect-payment-method--modal-content-messages">
+            <div class="payu-blik-without-redirect-payment-method--modal-content-message-wait">
+                {% block payu_blik_without_redirect_payment_method_modal_content_message_wait %}
+                    <div class="payu-blik-without-redirect-payment-method--modal-content--loader">
+                        <div class="payu-blik-without-redirect-payment-method--modal-content--loader-animation"></div>
+                    </div>
+                    <h3>{{ "crehler-payu.blikWithoutRedirectPaymentMethod.modal.content.message.wait.header" | trans | sw_sanitize }}</h3>
+                    <p>{{ "crehler-payu.blikWithoutRedirectPaymentMethod.modal.content.message.wait.content" | trans | sw_sanitize }}</p>
+                {% endblock %}
+            </div>
+            <div class="payu-blik-without-redirect-payment-method--modal-content-message-error is--hidden">
+                {% block payu_blik_without_redirect_payment_method_modal_content_message_error %}
+                    <h3>{{ "crehler-payu.blikWithoutRedirectPaymentMethod.modal.content.message.error.header" | trans | sw_sanitize }}</h3>
+                    <p>{{ "crehler-payu.blikWithoutRedirectPaymentMethod.modal.content.message.error.content" | trans | sw_sanitize }}</p>
+                {% endblock %}
+            </div>
+            <div class="payu-blik-without-redirect-payment-method--modal-content-message-success is--hidden">
+                {% block payu_blik_without_redirect_payment_method_modal_content_message_success %}
+                    <h3>{{ "crehler-payu.blikWithoutRedirectPaymentMethod.modal.content.message.success.header" | trans | sw_sanitize }}</h3>
+                    <p>{{ "crehler-payu.blikWithoutRedirectPaymentMethod.modal.content.message.success.content" | trans | sw_sanitize }}</p>
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

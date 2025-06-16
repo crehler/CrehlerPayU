@@ -1,25 +1,45 @@
 <?php
+
 /**
- * @copyright 2024 Crehler Sp. z o. o.
+ * @copyright 2019 Crehler Sp. z o. o.
  *
  * https://crehler.com/
  * support@crehler.com
  *
  * This file is part of the PayU plugin for Shopware 6.
- * License CC BY-ND 4.0 (https://creativecommons.org/licenses/by-nd/4.0/legalcode.pl) see LICENSE file.
- *
+ * All rights reserved.
  */
+
+declare(strict_types=1);
 
 namespace Crehler\PayU\Util\PluginLifecycle;
 
+use Crehler\PayU\Core\Checkout\Payment\PayUPayment;
+use Crehler\PayU\Core\Checkout\Payment\PayUPaymentBanks;
+use Crehler\PayU\Core\Checkout\Payment\PayuPaymentBlik;
+use Crehler\PayU\Core\Checkout\Payment\PayUPaymentBlikWithoutRedirect;
+use Crehler\PayU\Core\Checkout\Payment\PayUPaymentCards;
+use Crehler\PayU\Core\Checkout\Payment\PayUPaymentCredit;
+use Crehler\PayU\Core\Checkout\Payment\PayUPaymentWallet;
 use Crehler\PayU\Service\PayU\ConfigurationService;
 
 final class Install extends AbstractLifecycle
 {
-    public function install()
+    public function install(): void
     {
-        $paymentMethodId = $this->paymentMethodUtil->createPaymentMethod();
-        $this->savePaymentMethodId($paymentMethodId);
+        $payuPaymentId = $this->paymentMethodUtil->createPaymentMethod(PayUPayment::class);
+        $this->paymentMethodUtil->createPaymentMethod(PayUPaymentBlikWithoutRedirect::class);
+        $this->paymentMethodUtil->createPaymentMethod(PayUPaymentBanks::class);
+        $this->paymentMethodUtil->createPaymentMethod(PayuPaymentBlik::class);
+        $this->paymentMethodUtil->createPaymentMethod(PayUPaymentCards::class);
+        $this->paymentMethodUtil->createPaymentMethod(PayUPaymentCredit::class);
+        $this->paymentMethodUtil->createPaymentMethod(PayUPaymentWallet::class);
+        $this->transitionUtil->createPaidToPartiallyPaidTransition();
+        $this->mailUtil->createPaymentLinkMail();
+        $this->mailUtil->createSurchargeLinkMail();
+        $this->customFieldsUtil->createPayuPaymentCustomFields();
+
+        $this->savePaymentMethodId($payuPaymentId);
         $this->addDefaultConfiguration();
     }
 

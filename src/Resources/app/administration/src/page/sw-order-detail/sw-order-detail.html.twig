@@ -1,7 +1,4 @@
 {% block sw_order_detail_base_status_card %}
-
     {% parent %}
-    <sw-order-detail-payu :orderId="orderId" :isLoading="isLoading" v-if="!isLoading">
-
-    </sw-order-detail-payu>
+    <sw-order-detail-payu :orderId="orderId" :isLoading="isLoading" v-if="!isLoading"></sw-order-detail-payu>
 {% endblock %}

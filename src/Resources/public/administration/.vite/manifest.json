@@ -1,0 +1,11 @@
+{
+  "main.js": {
+    "file": "js/crehler-pay-u.js",
+    "name": "crehler-pay-u",
+    "src": "main.js",
+    "isEntry": true,
+    "css": [
+      "css/crehler-pay-u.css"
+    ]
+  }
+}

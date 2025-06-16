@@ -1,63 +1,52 @@
 <?php
+
 /**
- * @copyright 2024 Crehler Sp. z o. o.
+ * @copyright 2019 Crehler Sp. z o. o.
  *
  * https://crehler.com/
  * support@crehler.com
  *
  * This file is part of the PayU plugin for Shopware 6.
- * License CC BY-ND 4.0 (https://creativecommons.org/licenses/by-nd/4.0/legalcode.pl) see LICENSE file.
- *
+ * All rights reserved.
  */
+
+declare(strict_types=1);
 
 namespace Crehler\PayU\Struct;
 
-/**
- * Class Product
- */
 class Product extends PayUStruct
 {
     /**
      * Name of the product
-     *
-     * @var string
      */
-    protected $name;
+    protected string $name;
 
     /**
      * Unit price
-     *
-     * @var int
      */
-    protected $unitPrice;
+    protected int $unitPrice;
 
     /**
      * Quantity
-     *
-     * @var int
      */
-    protected $quantity;
+    protected int $quantity;
 
     /**
-     * 	Product type, which can be virtual or material.
-     *
-     * @var bool
+     * Product type, which can be virtual or material.
      */
-    protected $virtual;
+    protected bool $virtual;
 
     /**
      * Marketplace date from which the product (or offer) is available, for example: "2016-01-26T17:35:37+01:00"
-     *
-     * @var \DateTime
      */
-    protected $listingDate;
+    protected \DateTimeInterface $listingDate;
 
     public function getName(): string
     {
         return $this->name;
     }
 
-    public function setName(string $name): Product
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -69,7 +58,7 @@ class Product extends PayUStruct
         return $this->unitPrice;
     }
 
-    public function setUnitPrice(int $unitPrice): Product
+    public function setUnitPrice(int $unitPrice): self
     {
         $this->unitPrice = $unitPrice;
 
@@ -81,7 +70,7 @@ class Product extends PayUStruct
         return $this->quantity;
     }
 
-    public function setQuantity(int $quantity): Product
+    public function setQuantity(int $quantity): self
     {
         $this->quantity = $quantity;
 
@@ -93,7 +82,7 @@ class Product extends PayUStruct
         return $this->virtual;
     }
 
-    public function setVirtual(bool $virtual): Product
+    public function setVirtual(bool $virtual): self
     {
         $this->virtual = $virtual;
 
@@ -105,7 +94,7 @@ class Product extends PayUStruct
         return $this->listingDate->format(\DateTimeInterface::RFC3339);
     }
 
-    public function setListingDate(\DateTimeInterface $listingDate): Product
+    public function setListingDate(\DateTimeInterface $listingDate): self
     {
         $this->listingDate = $listingDate;
 

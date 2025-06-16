@@ -1,93 +1,73 @@
 <?php
+
 /**
- * @copyright 2024 Crehler Sp. z o. o.
+ * @copyright 2019 Crehler Sp. z o. o.
  *
  * https://crehler.com/
  * support@crehler.com
  *
  * This file is part of the PayU plugin for Shopware 6.
- * License CC BY-ND 4.0 (https://creativecommons.org/licenses/by-nd/4.0/legalcode.pl) see LICENSE file.
- *
+ * All rights reserved.
  */
+
+declare(strict_types=1);
 
 namespace Crehler\PayU\Struct;
 
-/**
- * Class OrderCreate
- */
 class OrderCreate extends PayUStruct
 {
     /**
      * ID of an order used in merchant system
-     *
-     * @var string
      */
-    protected $extOrderId;
+    protected string $extOrderId;
 
     /**
-     * 	The address for sending notifications
-     *
-     * @var string
+     * The address for sending notifications
      */
-    protected $notifyUrl;
+    protected string $notifyUrl;
 
     /**
-     * 	Payer’s IP address, e.g. 123.123.123.123. Note: 0.0.0.0 is not accepted.
-     *
-     * @var string
+     * Payer’s IP address, e.g. 123.123.123.123. Note: 0.0.0.0 is not accepted.
      */
-    protected $customerIp;
+    protected string $customerIp;
 
     /**
      * Point of sale ID
-     *
-     * @var int
      */
-    protected $merchantPosId;
+    protected int $merchantPosId;
 
     /**
      * Duration for the validity of an order (in seconds), during which time payment must be made
-     *
-     * @var int
      */
-    protected $validityTime;
+    protected int $validityTime;
 
     /**
-     * Description of the an order
-     *
-     * @var string
+     * Description of the order
      */
-    protected $description;
+    protected string $description;
 
     /**
      * Additional description of the order
-     *
-     * @var string
      */
-    protected $additionalDescription;
+    protected string $additionalDescription;
 
     /**
      * Currency code compliant with ISO 4217 (e.g EUR).
-     *
-     * @var string
      */
-    protected $currencyCode;
+    protected string $currencyCode;
 
     /**
-     * 	Total price of the order in pennies (e.g. 1000 is 10.00 EUR). Applies also to currencies without subunits (e.g. 1000 is 10 HUF).
-     *
-     * @var int
+     * Total price of the order in pennies (e.g. 1000 is 10.00 EUR).
+     * Applies also to currencies without subunits (e.g. 1000 is 10 HUF).
      */
-    protected $totalAmount;
+    protected int $totalAmount;
 
     /**
      * Information about party initializing order:
      * STANDARD_CARDHOLDER - payment is initialized by the card owner;
      * STANDARD_MERCHANT - payment is initialized by the shop, without card owner participation.
-     *
-     * @var string
      */
-    protected $cardOnFile;
+    protected string $cardOnFile;
 
     /**
      * Address for redirecting the customer after payment is commenced.
@@ -95,45 +75,39 @@ class OrderCreate extends PayUStruct
      * Please note that no decision regarding payment status should be made depending
      * on the presence or lack of this parameter
      * (to get payment status, wait for notification or retrieve order details).
-     *
-     * @var string
      */
-    protected $continueUrl;
+    protected string $continueUrl;
 
     /**
      * Section containing buyer data. This information is not required, but it is strongly recommended to include it.
-     * Otherwise the buyer will be prompted to provide missing data on PayU page and payment
+     * Otherwise, the buyer will be prompted to provide missing data on PayU page and payment
      * via Installments or Pay later will not be possible.
-     *
-     * @var Buyer
      */
-    protected $buyer;
+    protected Buyer $buyer;
 
     /**
      * Section containing data of the ordered products. Section products is an array of objects of type Product
      *
      * @var array|Product[]
      */
-    protected $products;
+    protected array $products;
 
     /**
      * Section allows to directly invoke payment method.
-     *
-     * @var string
      */
-    protected $payMethods;
+    protected ?PayMethods $payMethods = null;
 
     /**
-     * 	Section allows to pass currency conversion details.
+     * Section allows to pass currency conversion details.
      */
-    protected $mcpData;
+    protected mixed $mcpData;
 
     public function getExtOrderId(): string
     {
         return $this->extOrderId;
     }
 
-    public function setExtOrderId(string $extOrderId): OrderCreate
+    public function setExtOrderId(string $extOrderId): self
     {
         $this->extOrderId = $extOrderId;
 
@@ -145,7 +119,7 @@ class OrderCreate extends PayUStruct
         return $this->notifyUrl;
     }
 
-    public function setNotifyUrl(string $notifyUrl): OrderCreate
+    public function setNotifyUrl(string $notifyUrl): self
     {
         $this->notifyUrl = $notifyUrl;
 
@@ -157,7 +131,7 @@ class OrderCreate extends PayUStruct
         return $this->customerIp;
     }
 
-    public function setCustomerIp(string $customerIp): OrderCreate
+    public function setCustomerIp(string $customerIp): self
     {
         $this->customerIp = $customerIp;
 
@@ -169,7 +143,7 @@ class OrderCreate extends PayUStruct
         return $this->merchantPosId;
     }
 
-    public function setMerchantPosId(int $merchantPosId): OrderCreate
+    public function setMerchantPosId(int $merchantPosId): self
     {
         $this->merchantPosId = $merchantPosId;
 
@@ -181,7 +155,7 @@ class OrderCreate extends PayUStruct
         return $this->validityTime;
     }
 
-    public function setValidityTime(int $validityTime): OrderCreate
+    public function setValidityTime(int $validityTime): self
     {
         $this->validityTime = $validityTime;
 
@@ -193,7 +167,7 @@ class OrderCreate extends PayUStruct
         return $this->description;
     }
 
-    public function setDescription(string $description): OrderCreate
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -205,7 +179,7 @@ class OrderCreate extends PayUStruct
         return $this->additionalDescription;
     }
 
-    public function setAdditionalDescription(string $additionalDescription): OrderCreate
+    public function setAdditionalDescription(string $additionalDescription): self
     {
         $this->additionalDescription = $additionalDescription;
 
@@ -217,7 +191,7 @@ class OrderCreate extends PayUStruct
         return $this->currencyCode;
     }
 
-    public function setCurrencyCode(string $currencyCode): OrderCreate
+    public function setCurrencyCode(string $currencyCode): self
     {
         $this->currencyCode = $currencyCode;
 
@@ -229,7 +203,7 @@ class OrderCreate extends PayUStruct
         return $this->totalAmount;
     }
 
-    public function setTotalAmount(int $totalAmount): OrderCreate
+    public function setTotalAmount(int $totalAmount): self
     {
         $this->totalAmount = $totalAmount;
 
@@ -241,7 +215,7 @@ class OrderCreate extends PayUStruct
         return $this->cardOnFile;
     }
 
-    public function setCardOnFile(string $cardOnFile): OrderCreate
+    public function setCardOnFile(string $cardOnFile): self
     {
         $this->cardOnFile = $cardOnFile;
 
@@ -253,7 +227,7 @@ class OrderCreate extends PayUStruct
         return $this->continueUrl;
     }
 
-    public function setContinueUrl(string $continueUrl): OrderCreate
+    public function setContinueUrl(string $continueUrl): self
     {
         $this->continueUrl = $continueUrl;
 
@@ -265,14 +239,14 @@ class OrderCreate extends PayUStruct
         return $this->buyer;
     }
 
-    public function setBuyer(Buyer $buyer): OrderCreate
+    public function setBuyer(Buyer $buyer): self
     {
         $this->buyer = $buyer;
 
         return $this;
     }
 
-    public function addProduct(Product $product): OrderCreate
+    public function addProduct(Product $product): self
     {
         $this->products[] = $product;
 
@@ -282,7 +256,7 @@ class OrderCreate extends PayUStruct
     /**
      * @return array|Product[]
      */
-    public function getProducts()
+    public function getProducts(): array
     {
         return $this->products;
     }
@@ -292,34 +266,31 @@ class OrderCreate extends PayUStruct
      *
      * @return OrderCreate
      */
-    public function setProducts($products)
+    public function setProducts(array $products): self
     {
         $this->products = $products;
 
         return $this;
     }
 
-    public function getPayMethods(): string
+    public function getPayMethods(): ?PayMethods
     {
         return $this->payMethods;
     }
 
-    public function setPayMethods(string $payMethods): OrderCreate
+    public function setPayMethods(PayMethods $payMethods): self
     {
         $this->payMethods = $payMethods;
 
         return $this;
     }
 
-    public function getMcpData()
+    public function getMcpData(): mixed
     {
         return $this->mcpData;
     }
 
-    /**
-     * @return OrderCreate
-     */
-    public function setMcpData(mixed $mcpData)
+    public function setMcpData(mixed $mcpData): self
     {
         $this->mcpData = $mcpData;
 

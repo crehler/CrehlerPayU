@@ -1,48 +1,48 @@
 {
-    "name": "crehler/payu",
-    "description": "PayU integration for Shopware 6",
-    "type": "shopware-platform-plugin",
-    "license": "CC BY-ND 4.0",
-    "version": "2.0.4",
-    "authors": [
-        {
-            "name": "Crehler Sp. z o. o.",
-            "email": "support@crehler.com",
-            "homepage": "https://crehler.com",
-            "role": "Owner"
-        }
-    ],
-    "support": {
-        "email": "support@crehler.com"
+  "name": "crehler/payu",
+  "description": "PayU integration for Shopware 6",
+  "type": "shopware-platform-plugin",
+  "license": "CC BY-ND 4.0",
+  "version": "3.0.15",
+  "authors": [
+    {
+      "name": "Crehler Sp. z o. o.",
+      "email": "support@crehler.com",
+      "homepage": "https://crehler.com",
+      "role": "Owner"
+    }
+  ],
+  "support": {
+    "email": "support@crehler.com"
+  },
+  "autoload": {
+    "psr-4": {
+      "Crehler\\PayU\\": "src/"
+    }
+  },
+  "extra": {
+    "shopware-plugin-class": "Crehler\\PayU\\CrehlerPayU",
+    "plugin-icon": "src/Resources/config/plugin.png",
+    "copyright": "(c) by Crehler Sp. z o. o.",
+    "label": {
+      "de-DE": "PayU von CREHLER",
+      "en-GB": "PayU by CREHLER",
+      "pl-PL": "PayU od CREHLER"
     },
-    "autoload": {
-        "psr-4": {
-            "Crehler\\PayU\\": "src/"
-        }
+    "description": {
+      "de-DE": "Dank unseres kostenlosen Plugins, können Sie schnell und einfach mit PayU bezahlen. Auf diese Weise, bieten Sie Ihren Kunden aus Polen die Option, über den nationalen Zahlungsdienst PayU zu bestellen.",
+      "en-GB": "Thanks to our free plugin, you can make payments via PayU quickly and easily. This way, you offer your customers from Poland the opportunity to make orders via the national payment service provider PayU.",
+      "pl-PL": "Dzięki tej darmowej wtyczce, Twoi klienci będą wstanie dokonać płatności za pomocą najbardziej popularnych i wygodnych metod, które dostarcza platforma PayU."
     },
-    "extra": {
-        "shopware-plugin-class": "Crehler\\PayU\\CrehlerPayU",
-        "plugin-icon": "src/Resources/config/plugin.png",
-        "copyright": "(c) by Crehler Sp. z o. o.",
-        "label": {
-            "de-DE": "PayU von CREHLER",
-            "en-GB": "PayU by CREHLER",
-            "pl-PL": "PayU od CREHLER"
-        },
-        "description": {
-            "de-DE": "Dank unseres kostenlosen Plugins, können Sie schnell und einfach mit PayU bezahlen. Auf diese Weise, bieten Sie Ihren Kunden aus Polen die Option, über den nationalen Zahlungsdienst PayU zu bestellen.",
-            "en-GB": "Thanks to our free plugin, you can make payments via PayU quickly and easily. This way, you offer your customers from Poland the opportunity to make orders via the national payment service provider PayU.",
-            "pl-PL": "Dzięki tej darmowej wtyczce, Twoi klienci będą wstanie dokonać płatności za pomocą najbardziej popularnych i wygodnych metod, które dostarcza platforma PayU."
-        },
-        "manufacturerLink": {
-            "de-DE": "https://store.shopware.com/crehler.html",
-            "en-GB": "https://store.shopware.com/en/crehler.html"
-        }
-    },
-    "require": {
-        "shopware/core": "^6.5",
-        "shopware/storefront": "^6.5",
-        "openpayu/openpayu": "^2.2"
-    },
-    "minimum-stability": "RC"
+    "manufacturerLink": {
+      "de-DE": "https://store.shopware.com/crehler.html",
+      "en-GB": "https://store.shopware.com/en/crehler.html"
+    }
+  },
+  "require": {
+    "shopware/core": "^6.6",
+    "shopware/storefront": "^6.6",
+    "openpayu/openpayu": "^2.2"
+  },
+  "minimum-stability": "RC"
 }

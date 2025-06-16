@@ -4,28 +4,101 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
+    <imports>
+        <import resource="monolog.xml"/>
+    </imports>
+
     <services>
-        <service id="crehler_payu.logger" class="Monolog\Logger">
-            <factory service="Shopware\Core\Framework\Log\LoggerFactory" method="createRotating"/>
-            <argument type="string">payu</argument>
-        </service>
         <service id="Crehler\PayU\Core\Checkout\Payment\PayUPayment">
-            <argument id="Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStateHandler" type="service"/>
+            <argument type="service" id="Crehler\PayU\Service\PayU\ConfigurationService"/>
+            <argument type="service" id="monolog.logger.crehler_payu_channel"/>
             <argument id="Crehler\PayU\Service\PayU\OrderCreate" type="service"/>
             <argument type="service" id="order_transaction.repository"/>
+            <argument id="Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStateHandler"
+                      type="service"/>
             <argument type="service" id="Crehler\PayU\Service\PayU\UpdateStatus"/>
-            <argument type="service" id="crehler_payu.logger"/>
             <tag name="shopware.payment.method.async"/>
         </service>
-        <service id="Crehler\PayU\Service\FinalizeTokenGenerator">
-            <argument type="service" id="Shopware\Core\Checkout\Payment\Cart\Token\JWTFactoryV2"/>
-            <argument type="service" id="router"/>
+        <service id="Crehler\PayU\Core\Checkout\Payment\PayUPaymentBanks">
+            <argument type="service" id="Crehler\PayU\Service\PayU\ConfigurationService"/>
+            <argument type="service" id="monolog.logger.crehler_payu_channel"/>
+            <argument id="Crehler\PayU\Service\PayU\OrderCreate" type="service"/>
             <argument type="service" id="order_transaction.repository"/>
+            <argument id="Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStateHandler"
+                      type="service"/>
+            <argument type="service" id="Crehler\PayU\Service\PayU\UpdateStatus"/>
+            <tag name="shopware.payment.method.async"/>
         </service>
-        <service id="Crehler\PayU\Controller\Storefront\PayUNotifyController" public="true">
-            <argument type="service" id="Crehler\PayU\Service\FinalizeTokenGenerator"/>
-            <argument type="service" id="Crehler\PayU\Core\Checkout\Payment\PayUPayment"/>
-            <argument type="service" id="crehler_payu.logger"/>
+        <service id="Crehler\PayU\Core\Checkout\Payment\PayuPaymentBlik">
+            <argument type="service" id="Crehler\PayU\Service\PayU\ConfigurationService"/>
+            <argument type="service" id="monolog.logger.crehler_payu_channel"/>
+            <argument id="Crehler\PayU\Service\PayU\OrderCreate" type="service"/>
+            <argument type="service" id="order_transaction.repository"/>
+            <argument id="Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStateHandler"
+                      type="service"/>
+            <argument type="service" id="Crehler\PayU\Service\PayU\UpdateStatus"/>
+            <tag name="shopware.payment.method.async"/>
+        </service>
+        <service id="Crehler\PayU\Core\Checkout\Payment\PayUPaymentCards">
+            <argument type="service" id="Crehler\PayU\Service\PayU\ConfigurationService"/>
+            <argument type="service" id="monolog.logger.crehler_payu_channel"/>
+            <argument id="Crehler\PayU\Service\PayU\OrderCreate" type="service"/>
+            <argument type="service" id="order_transaction.repository"/>
+            <argument id="Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStateHandler"
+                      type="service"/>
+            <argument type="service" id="Crehler\PayU\Service\PayU\UpdateStatus"/>
+            <tag name="shopware.payment.method.async"/>
+        </service>
+        <service id="Crehler\PayU\Core\Checkout\Payment\PayUPaymentCredit">
+            <argument type="service" id="Crehler\PayU\Service\PayU\ConfigurationService"/>
+            <argument type="service" id="monolog.logger.crehler_payu_channel"/>
+            <argument id="Crehler\PayU\Service\PayU\OrderCreate" type="service"/>
+            <argument type="service" id="order_transaction.repository"/>
+            <argument id="Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStateHandler"
+                      type="service"/>
+            <argument type="service" id="Crehler\PayU\Service\PayU\UpdateStatus"/>
+            <tag name="shopware.payment.method.async"/>
+        </service>
+        <service id="Crehler\PayU\Core\Checkout\Payment\PayUPaymentWallet">
+            <argument type="service" id="Crehler\PayU\Service\PayU\ConfigurationService"/>
+            <argument type="service" id="monolog.logger.crehler_payu_channel"/>
+            <argument id="Crehler\PayU\Service\PayU\OrderCreate" type="service"/>
+            <argument type="service" id="order_transaction.repository"/>
+            <argument id="Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStateHandler"
+                      type="service"/>
+            <argument type="service" id="Crehler\PayU\Service\PayU\UpdateStatus"/>
+            <tag name="shopware.payment.method.async"/>
+        </service>
+        <service id="Crehler\PayU\Core\Checkout\Payment\PayUPaymentBlikWithoutRedirect">
+            <argument type="service" id="Crehler\PayU\Service\PayU\ConfigurationService"/>
+            <argument type="service" id="monolog.logger.crehler_payu_channel"/>
+            <argument id="Crehler\PayU\Service\PayU\OrderCreate" type="service"/>
+            <argument type="service" id="order_transaction.repository"/>
+            <argument id="Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStateHandler"
+                      type="service"/>
+            <argument type="service" id="Crehler\PayU\Service\PayU\UpdateStatus"/>
+            <tag name="shopware.payment.method.sync"/>
+        </service>
+        <service id="Crehler\PayU\Service\FinalizeTokenGenerator">
+            <argument type="service" id="order_transaction.repository"/>
+            <argument type="service" id="router"/>
+            <argument type="service" id="Shopware\Core\Checkout\Payment\Cart\Token\JWTFactoryV2"/>
+        </service>
+        <service id="Crehler\PayU\Checkout\Payment\PayU\SalesChannel\BlikWithoutRedirectPaymentRoute" public="true">
+            <argument type="service" id="Shopware\Storefront\Framework\Routing\Router"/>
+            <argument type="service" id="Shopware\Core\Checkout\Order\SalesChannel\OrderService"/>
+            <argument type="service" id="Shopware\Core\Checkout\Payment\PaymentService"/>
+            <argument type="service" id="order_transaction.repository"/>
+            <argument type="service" id="Crehler\PayU\Service\PayU\ConfigurationService"/>
+        </service>
+        <service id="Crehler\PayU\Checkout\Payment\PayU\SalesChannel\PaymentMethodsRoute">
+            <argument type="service" id="Crehler\PayU\Service\PayU\ConfigurationService"/>
+            <argument type="service" id="monolog.logger.crehler_payu_channel"/>
+            <argument type="service" id="payment_method.repository"/>
+            <argument type="service" id="event_dispatcher"/>
+        </service>
+        <service id="Crehler\PayU\Controller\Storefront\PayUPaymentsMethodsController" public="true">
+            <argument type="service" id="Crehler\PayU\Checkout\Payment\PayU\SalesChannel\PaymentMethodsRoute"/>
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>
@@ -36,34 +109,54 @@
                 <argument type="service" id="service_container"/>
             </call>
         </service>
+        <service id="Crehler\PayU\Controller\Api\PayUNotifyController" public="true" autowire="true">
+            <argument type="service" id="monolog.logger.crehler_payu_channel"/>
+            <argument type="service" id="Crehler\PayU\Service\FinalizeTokenGenerator"/>
+            <argument type="service" id="Crehler\PayU\Core\Checkout\Payment\PayUPayment"/>
+            <argument type="service" id="Crehler\PayU\Core\Checkout\Payment\PayUPaymentBlikWithoutRedirect"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+        <service id="Crehler\PayU\Controller\Api\PayUPaymentLinkController" public="true">
+            <argument type="service" id="Crehler\PayU\Service\PaymentLinkService"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
         <service id="Crehler\PayU\Controller\Api\ConfigurationController" public="true">
-            <argument type="service" id="crehler_payu.logger"/>
+            <argument type="service" id="Crehler\PayU\Util\PayuMethodFinder"/>
             <argument type="service" id="Crehler\PayU\Service\PayU\ConfigurationService"/>
-            <argument type="service" id="Crehler\PayU\Util\PayuMethodFinder" />
-            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService" />
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+        <service id="Crehler\PayU\Controller\Storefront\PayUPaymentBlikWithoutRedirectController" public="true">
+            <argument type="service"
+                      id="Crehler\PayU\Checkout\Payment\PayU\SalesChannel\BlikWithoutRedirectPaymentRoute"/>
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>
         </service>
         <service id="Crehler\PayU\Service\PayU\ConfigurationService">
-            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService" />
-            <argument type="service" id="Crehler\PayU\Util\VendorLoader" />
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="monolog.logger.crehler_payu_channel"/>
             <argument type="service" id="parameter_bag"/>
-            <argument type="service" id="crehler_payu.logger"/>
             <argument type="service" id="request_stack"/>
+            <argument type="service" id="Crehler\PayU\Util\VendorLoader"/>
         </service>
         <service id="Crehler\PayU\Service\PaymentDetailsReader">
+            <argument id="Shopware\Core\System\SystemConfig\SystemConfigService" type="service"/>
+            <argument type="service" id="country.repository"/>
             <argument type="service" id="language.repository"/>
             <argument type="service" id="locale.repository"/>
             <argument type="service" id="order_address.repository"/>
-            <argument type="service" id="country.repository"/>
-            <argument id="Shopware\Core\System\SystemConfig\SystemConfigService" type="service"/>
         </service>
         <service id="Crehler\PayU\Service\PayU\OrderCreate">
+            <argument id="Crehler\PayU\Service\PayU\ConfigurationService" type="service"/>
             <argument id="Crehler\PayU\Service\FinalizeTokenGenerator" type="service"/>
             <argument id="Crehler\PayU\Service\PaymentDetailsReader" type="service"/>
             <argument id="request_stack" type="service"/>
-            <argument id="Crehler\PayU\Service\PayU\ConfigurationService" type="service"/>
         </service>
         <service id="Crehler\PayU\Service\PayU\UpdateStatus">
             <argument id="Crehler\PayU\Service\PayU\ConfigurationService" type="service"/>
@@ -75,6 +168,28 @@
         <service id="Crehler\PayU\Util\VendorLoader"/>
         <service id="Crehler\PayU\Util\PayuMethodFinder" public="true">
             <argument id="payment_method.repository" type="service"/>
+        </service>
+        <service id="Crehler\PayU\Subscriber\SavePaymentMethodSubscriber">
+            <argument type="service" id="request_stack"/>
+            <argument type="service" id="customer.repository"/>
+            <argument type="service" id="logger"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+        <service id="Crehler\PayU\Subscriber\BusinessEventCollectorSubscriber">
+            <argument type="service" id="Shopware\Core\Framework\Event\BusinessEventCollector"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+        <service id="Crehler\PayU\Service\PaymentLinkService">
+            <argument type="service" id="order.repository"/>
+            <argument type="service" id="order_transaction.repository"/>
+            <argument type="service" id="Shopware\Storefront\Framework\Routing\Router"/>
+            <argument type="service" id="Crehler\PayU\Service\PayU\OrderCreate"/>
+            <argument type="service" id="Shopware\Core\System\SalesChannel\Context\CachedSalesChannelContextFactory"/>
+            <argument type="service" id="Crehler\PayU\Service\PayU\ConfigurationService"/>
+            <argument type="service" id="Shopware\Core\System\StateMachine\Loader\InitialStateIdLoader"/>
+            <argument type="service"
+                      id="Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStateHandler"/>
+            <argument type="service" id="event_dispatcher"/>
         </service>
     </services>
 </container>

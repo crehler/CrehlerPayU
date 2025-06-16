@@ -138,4 +138,115 @@
             <name>sandboxCheckCredentials</name>
         </component>
     </card>
+
+    <card>
+        <title>Blik Live Configuration</title>
+        <title lang="de-DE">Blik Live-Konfiguration</title>
+        <title lang="pl-PL">Konfiguracja Produkcyjna Blik</title>
+        <title lang="en-GB">Blik Live Configuration</title>
+        <name>payuBlikLiveConfiguration</name>
+        <input-field type="text">
+            <name>blikPosId</name>
+            <label>PosId</label>
+            <helpText>Payment point id</helpText>
+            <helpText lang="de-DE">ID des Zahlungspunktes</helpText>
+            <helpText lang="pl-PL">Id punktu płatności</helpText>
+            <helpText lang="en-GB">Payment point id</helpText>
+        </input-field>
+        <input-field type="password">
+            <name>blikMd5Key</name>
+            <label>MD5 key</label>
+            <label lang="de-DE">MD5-Taste</label>
+            <label lang="pl-PL">Klucz MD5</label>
+            <label lang="en-GB">MD5 key</label>
+            <helpText>Second key (MD5)</helpText>
+            <helpText lang="de-DE">Zweiter Schlüssel (MD5)</helpText>
+            <helpText lang="pl-PL">Drugi klucz (MD5)</helpText>
+            <helpText lang="en-GB">Second key (MD5)</helpText>
+        </input-field>
+        <input-field type="text">
+            <name>blikClientId</name>
+            <label>OAuth Client ID</label>
+            <label lang="de-DE">OAuth-Client-ID</label>
+            <label lang="pl-PL">Identyfikator klienta OAuth</label>
+            <label lang="en-GB">OAuth Client ID</label>
+            <helpText>Protokół OAuth - client_id</helpText>
+            <helpText lang="de-DE">OAuth-Protokoll - client_id</helpText>
+            <helpText lang="pl-PL">Protokół OAuth - client_id</helpText>
+            <helpText lang="en-GB">OAuth protocol - client_id</helpText>
+        </input-field>
+        <input-field type="password">
+            <name>blikClientSecret</name>
+            <label>OAuth Client Secret</label>
+            <label lang="de-DE">OAuth-Client-Geheimnis</label>
+            <label lang="pl-PL">Tajny klucz klienta OAuth</label>
+            <label lang="en-GB">OAuth Client Secret</label>
+            <helpText>OAuth protocol - client_secret</helpText>
+            <helpText lang="de-DE">OAuth-Protokoll - client_secret</helpText>
+            <helpText lang="pl-PL">Protokół OAuth - client_secret</helpText>
+            <helpText lang="en-GB">OAuth protocol - client_secret</helpText>
+        </input-field>
+        <component name="cr-payu-blik-live-credential">
+            <name>blikLiveCheckCredentials</name>
+        </component>
+    </card>
+
+    <card>
+        <title>Blik Sandbox Configuration</title>
+        <title lang="de-DE">Blik Sandbox-Konfiguration</title>
+        <title lang="pl-PL">Konfiguracja Sandbox Blik</title>
+        <title lang="en-GB">Blik Sandbox Configuration</title>
+        <name>payuBlikSandBoxConfiguration</name>
+        <input-field type="bool">
+            <name>blikSandbox</name>
+            <label>Włącz Sandbox</label>
+            <label lang="de-DE">Sandbox einschalten</label>
+            <label lang="pl-PL">Włącz Sandbox</label>
+            <label lang="en-GB">Sandbox enabled</label>
+        </input-field>
+        <input-field type="text">
+            <name>blikSandboxPosId</name>
+            <label>PosId</label>
+            <helpText>Payment point id</helpText>
+            <helpText lang="de-DE">ID des Zahlungspunktes</helpText>
+            <helpText lang="pl-PL">Id punktu płatności</helpText>
+            <helpText lang="en-GB">Payment point id</helpText>
+        </input-field>
+        <input-field type="password">
+            <name>blikSandboxMd5Key</name>
+            <label>MD5 key</label>
+            <label lang="de-DE">MD5-Taste</label>
+            <label lang="pl-PL">Klucz MD5</label>
+            <label lang="en-GB">MD5 key</label>
+            <helpText>Second key (MD5)</helpText>
+            <helpText lang="de-DE">Zweiter Schlüssel (MD5)</helpText>
+            <helpText lang="pl-PL">Drugi klucz (MD5)</helpText>
+            <helpText lang="en-GB">Second key (MD5)</helpText>
+        </input-field>
+        <input-field type="text">
+            <name>blikSandboxClientId</name>
+            <label>OAuth Client ID</label>
+            <label lang="de-DE">OAuth-Client-ID</label>
+            <label lang="pl-PL">Identyfikator klienta OAuth</label>
+            <label lang="en-GB">OAuth Client ID</label>
+            <helpText>Protokół OAuth - client_id</helpText>
+            <helpText lang="de-DE">OAuth-Protokoll - client_id</helpText>
+            <helpText lang="pl-PL">Protokół OAuth - client_id</helpText>
+            <helpText lang="en-GB">OAuth protocol - client_id</helpText>
+        </input-field>
+        <input-field type="password">
+            <name>blikSandboxClientSecret</name>
+            <label>OAuth Client Secret</label>
+            <label lang="de-DE">OAuth-Client-Geheimnis</label>
+            <label lang="pl-PL">Tajny klucz klienta OAuth</label>
+            <label lang="en-GB">OAuth Client Secret</label>
+            <helpText>OAuth protocol - client_secret</helpText>
+            <helpText lang="de-DE">OAuth-Protokoll - client_secret</helpText>
+            <helpText lang="pl-PL">Protokół OAuth - client_secret</helpText>
+            <helpText lang="en-GB">OAuth protocol - client_secret</helpText>
+        </input-field>
+        <component name="cr-payu-blik-sandbox-credential">
+            <name>blikSandboxCheckCredentials</name>
+        </component>
+    </card>
 </config>

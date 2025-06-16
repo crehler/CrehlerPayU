@@ -1,98 +1,77 @@
 <?php
+
 /**
- * @copyright 2024 Crehler Sp. z o. o.
+ * @copyright 2019 Crehler Sp. z o. o.
  *
  * https://crehler.com/
  * support@crehler.com
  *
  * This file is part of the PayU plugin for Shopware 6.
- * License CC BY-ND 4.0 (https://creativecommons.org/licenses/by-nd/4.0/legalcode.pl) see LICENSE file.
- *
+ * All rights reserved.
  */
+
+declare(strict_types=1);
 
 namespace Crehler\PayU\Struct;
 
-/**
- * Class BuyerDelivery
- */
 class BuyerDelivery extends PayUStruct
 {
     /**
      * Street
-     *
-     * @var string
      */
-    protected $street;
+    protected string $street;
 
     /**
      * Postal box
-     *
-     * @var string
      */
-    protected $postalBox;
+    protected string $postalBox;
 
     /**
      * Postal code
-     *
-     * @var string
      */
-    protected $postalCode;
+    protected string $postalCode;
 
     /**
      * City
-     *
-     * @var string
      */
-    protected $city;
+    protected string $city;
 
     /**
      * State
-     *
-     * @var string
      */
-    protected $state;
+    protected string $state;
 
     /**
      * Two-letter country code compliant with ISO-3166.
-     *
-     * @var string
      */
-    protected $countryCode;
+    protected string $countryCode;
 
     /**
      * Address description
-     *
-     * @var string
      */
-    protected $name;
+    protected string $name;
 
     /**
      * Recipient name
-     *
-     * @var string
      */
-    protected $recipientName;
+    protected string $recipientName;
 
     /**
      * Recipient email
-     *
-     * @var string
      */
-    protected $recipientEmail;
+    protected string $recipientEmail;
 
     /**
      * Recipient phone number
-     *
-     * @var string
      */
-    protected $recipientPhone;
+    protected string $recipientPhone;
 
     public function getStreet(): string
     {
         return $this->street;
     }
 
-    public function setStreet(string $street): BuyerDelivery
+    public function setStreet(string $street): self
     {
         $this->street = $street;
 
@@ -104,7 +83,7 @@ class BuyerDelivery extends PayUStruct
         return $this->postalBox;
     }
 
-    public function setPostalBox(string $postalBox): BuyerDelivery
+    public function setPostalBox(string $postalBox): self
     {
         $this->postalBox = $postalBox;
 
@@ -116,7 +95,7 @@ class BuyerDelivery extends PayUStruct
         return $this->postalCode;
     }
 
-    public function setPostalCode(string $postalCode): BuyerDelivery
+    public function setPostalCode(string $postalCode): self
     {
         $this->postalCode = $postalCode;
 
@@ -128,7 +107,7 @@ class BuyerDelivery extends PayUStruct
         return $this->city;
     }
 
-    public function setCity(string $city): BuyerDelivery
+    public function setCity(string $city): self
     {
         $this->city = $city;
 
@@ -140,7 +119,7 @@ class BuyerDelivery extends PayUStruct
         return $this->state;
     }
 
-    public function setState(string $state): BuyerDelivery
+    public function setState(string $state): self
     {
         $this->state = $state;
 
@@ -152,7 +131,7 @@ class BuyerDelivery extends PayUStruct
         return $this->countryCode;
     }
 
-    public function setCountryCode(string $countryCode): BuyerDelivery
+    public function setCountryCode(string $countryCode): self
     {
         $this->countryCode = $countryCode;
 
@@ -164,7 +143,7 @@ class BuyerDelivery extends PayUStruct
         return $this->name;
     }
 
-    public function setName(string $name): BuyerDelivery
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -176,7 +155,7 @@ class BuyerDelivery extends PayUStruct
         return $this->recipientName;
     }
 
-    public function setRecipientName(string $recipientName): BuyerDelivery
+    public function setRecipientName(string $recipientName): self
     {
         $this->recipientName = $recipientName;
 
@@ -188,7 +167,7 @@ class BuyerDelivery extends PayUStruct
         return $this->recipientEmail;
     }
 
-    public function setRecipientEmail(string $recipientEmail): BuyerDelivery
+    public function setRecipientEmail(string $recipientEmail): self
     {
         $this->recipientEmail = $recipientEmail;
 
@@ -200,7 +179,7 @@ class BuyerDelivery extends PayUStruct
         return $this->recipientPhone;
     }
 
-    public function setRecipientPhone(string $recipientPhone): BuyerDelivery
+    public function setRecipientPhone(string $recipientPhone): self
     {
         $this->recipientPhone = $recipientPhone;
 
